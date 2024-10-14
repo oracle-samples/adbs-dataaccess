@@ -1,28 +1,18 @@
-*This repository acts as a template for all of Oracle’s GitHub repositories. It contains information about the guidelines for those repositories. All files and sections contained in this template are mandatory, and a GitHub app ensures alignment with these guidelines. To get started with a new repository, replace the italic paragraphs with the respective text for your project.*
+# adbs-dataaccess
+This repository stores a variety of examples demonstrating how to use the ADB-S data access features. 
 
-# Project name
+| Repo/Folder name  | Description |
+| ------------- | ------------- |
+| [preauthurl](./preauthurl) | Pre Authenticated Request URL examples |
 
-*Describe your project's features, functionality and target audience*
-
-## Installation
-
-*Provide detailed step-by-step installation instructions. You can name this section **How to Run** or **Getting Started** instead of **Installation** if that's more acceptable for your project*
 
 ## Documentation
+You can find the online documentation of the Oracle Database under [docs.oracle.com/en/database/](http://docs.oracle.com/en/database/)
 
-*Developer-oriented documentation can be published on GitHub, but all product documentation must be published on <https://docs.oracle.com>*
-
-## Examples
-
-*Describe any included examples or provide a link to a demo/tutorial*
-
-## Help
-
-*Inform users on where to get help or how to receive official support from Oracle (if applicable)*
+## Dev Gym
+If you would like to challenge yourself, you can take quizzes, workouts and classes at [DevGym.oracle.com](https://devgym.oracle.com).
 
 ## Contributing
-
-*If your project has specific contribution requirements, update the CONTRIBUTING.md file to ensure those requirements are clearly explained*
 
 This project welcomes contributions from the community. Before submitting a pull request, please [review our contribution guide](./CONTRIBUTING.md)
 
@@ -32,13 +22,17 @@ Please consult the [security guide](./SECURITY.md) for our responsible security 
 
 ## License
 
-*The correct copyright notice format for both documentation and software is*
-    "Copyright (c) [year,] year Oracle and/or its affiliates."
-*You must include the year the content was first released (on any platform) and the most recent year in which it was revised*
+You may not use the identified files except in compliance with the
+Apache License, Version 2.0 (the "License.")
 
-Copyright (c) 2023 Oracle and/or its affiliates.
+You may obtain a copy of the License at
+http://www.apache.org/licenses/LICENSE-2.0.  A copy of the license is
+also reproduced in [LICENSE.md](./LICENSE.md)
 
-*Replace this statement if your project is not licensed under the UPL*
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+implied.
 
-Released under the Universal Permissive License v1.0 as shown at
-<https://oss.oracle.com/licenses/upl/>.
+See the License for the specific language governing permissions and
+limitations under the License.
