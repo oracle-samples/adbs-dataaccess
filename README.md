@@ -1,5 +1,5 @@
 # adbs-dataaccess
-This repository stores a variety of examples demonstrating how to use the ADB-S data access features. 
+This repository stores a variety of examples demonstrating how to use the Oracle Autonomous Database Serverless data access features. 
 
 | Repo/Folder name  | Description |
 | ------------- | ------------- |
