@@ -28,15 +28,15 @@ Customer should have a Google account.
 `Google Apps Script API on` in your Google account.
 ##  
 
-1. Login to Google account using Google Apps Script CLI tool and select the permission `Create and update Google Apps Script projects`
+4. Login to Google account using Google Apps Script CLI tool and select the permission `Create and update Google Apps Script projects`
 
     ```clasp login```
 ##  
 
-1. Open a Google Sheet and navigate to `Extensions -> Apps Script`. Go to `Project Settings` and under `IDs` section, copy the `Script ID`
+5. Open a Google Sheet and navigate to `Extensions -> Apps Script`. Go to `Project Settings` and under `IDs` section, copy the `Script ID`
 ##  
 
-1. Clone the Google Apps Script project locally and replace the remote code.
+6. Clone the Google Apps Script project locally and replace the remote code.
 
     ```clasp clone <Script ID copied in previous step>``` 
 
@@ -45,10 +45,10 @@ Customer should have a Google account.
     ```clasp push -f```
 ##  
 
-1. Install the Apps Script Project by going to `Editor` in your Apps Script Project, selecting `Code.gs` and click `Run` function for `onInstall`. Note that you may need to review and accept permissions required for the sample Add-on.
+7. Install the Apps Script Project by going to `Editor` in your Apps Script Project, selecting `Code.gs` and click `Run` function for `onInstall`. Note that you may need to review and accept permissions required for the sample Add-on.
 ##  
 
-1. Wait for install to finish. Refresh the Google Sheet & custom menu item `Autonomous Database` for the new Add-on should be visible.    
+8. Wait for install to finish. Refresh the Google Sheet & custom menu item `Autonomous Database` for the new Add-on should be visible.    
 ##  
 
 # Usage
