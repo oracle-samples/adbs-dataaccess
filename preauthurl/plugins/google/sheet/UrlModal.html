@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <style>
+    html {
+      height: 100%;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 10px;
+    }
+    form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+    button {
+      margin: 5px 0;
+      width: 100%;
+      padding: 5px 0 5px 10px;
+      background-color: #2596be;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #1f7c9c;
+    }
+    footer {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      right: 10px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <form onsubmit="return false;">
+      <input type="text" id="urlInput" placeholder="Enter Pre-authenticated URL..." 
+        style="width: 100%, height: 100%;"/>
+      <button type="submit" onclick="processInput()">Load Data</button>
+  </form>
+  <footer>
+    <div class="logo" style="display: flex; align-items: center;">
+      <svg class="u30-oicn" xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 0 32 21" style="padding-right: 5px;">
+          <path fill="#C74634" d="M9.9,20.1c-5.5,0-9.9-4.4-9.9-9.9c0-5.5,4.4-9.9,9.9-9.9h11.6c5.5,0,9.9,4.4,9.9,9.9c0,5.5-4.4,9.9-9.9,9.9H9.9 M21.2,16.6c3.6,0,6.4-2.9,6.4-6.4c0-3.6-2.9-6.4-6.4-6.4h-11c-3.6,0-6.4,2.9-6.4,6.4s2.9,6.4,6.4,6.4H21.2"></path>
+      </svg>
+      <div style="padding-right: 4px; font-size: 11px; font-family: Helvetica Neue, Helvetica, Arial, sans-serif;">
+          Powered by
+      </div>
+      <div style="color: #C74634; font-weight: 450; font-family: Helvetica Neue, Helvetica, Arial, sans-serif;">
+          Autonomous Database
+      </div>
+    </div>
+  </footer>
+  <script>
+    function saveUrl() {
+      const url = document.getElementById('urlInput').value;
+      google.script.run.saveUrl(url);
+      google.script.host.close();
+    }
+
+    function processInput() {
+      const urlInput = document.getElementById('urlInput');
+      
+      if (urlInput.checkValidity()) {
+        saveUrl(); 
+      } else {
+        urlInput.reportValidity();
+      }
+    }
+
+    urlInput.addEventListener('input', function() {
+      const regex = /^https:\/\/dataaccess\..*\.oraclecloudapps\.com\/adb\/p\/.*\/data/;
+      if (regex.test(urlInput.value)) {
+        urlInput.setCustomValidity(''); // Clear previous error message
+      } else {
+        urlInput.setCustomValidity('Please enter a valid Pre-authenticated URL');
+      }
+    });
+  </script>
+</body>
+</html>
