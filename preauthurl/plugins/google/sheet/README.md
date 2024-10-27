@@ -3,7 +3,7 @@
 The following sample code is for enabling Google Sheets Pre-Authenticated URL Add-on. 
 This folder maintains the sample source code for the add-on, with instructions on how to do a deployment and installation as well.
 
-The add-on provides functionality for integration of Pre-Authenticated URL with Google Sheets, 
+The sample add-on provides functionality for integration of Pre-Authenticated URL with Google Sheets, 
 enabling auto refresh and loading/reloading of data as well as coloring of columns.
 
 # Prerequisite
