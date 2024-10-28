@@ -1,0 +1,29 @@
+{
+  "timeZone": "America/Los_Angeles",
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8",
+  "oauthScopes": [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/script.container.ui",
+    "https://www.googleapis.com/auth/script.scriptapp",
+    "https://www.googleapis.com/auth/script.external_request"
+  ],
+  "urlFetchWhitelist": [
+    "https://*.oraclecloudapps.com/"
+  ],
+  "addOns": {
+    "common": {
+      "openLinkUrlPrefixes": [
+        "https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/autonomous-preauthenticated-request-url.html"
+      ],
+      "name": "Autonomous Database Plugin",
+      "logoUrl": "https://www.oracle.com/a/ocom/img/obic-technology-database-autonomous.svg"
+    },
+    "sheets": {
+      "homepageTrigger": {
+        "runFunction": "onOpen",
+        "enabled": true
+      }
+    }
+  }
+}

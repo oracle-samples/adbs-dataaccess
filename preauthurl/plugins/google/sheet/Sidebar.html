@@ -1,0 +1,323 @@
+<!--
+##  Copyright (c) 2024 Oracle and/or its affiliates.
+##
+## The Universal Permissive License (UPL), Version 1.0
+##
+## Subject to the condition set forth below, permission is hereby granted to any
+## person obtaining a copy of this software, associated documentation and/or data
+## (collectively the "Software"), free of charge and under any and all copyright
+## rights in the Software, and any and all patent rights owned or freely
+## licensable by each licensor hereunder covering either (i) the unmodified
+## Software as contributed to or provided by such licensor, or (ii) the Larger
+## Works (as defined below), to deal in both
+##
+## (a) the Software, and
+## (b) any piece of software and/or hardware listed in the lrgrwrks.txt file if
+## one is included with the Software (each a "Larger Work" to which the Software
+## is contributed by such licensors),
+##
+## without restriction, including without limitation the rights to copy, create
+## derivative works of, display, perform, and distribute the Software and make,
+## use, sell, offer for sale, import, export, have made, and have sold the
+## Software and the Larger Work(s), and to sublicense the foregoing rights on
+## either these or other terms.
+##
+## This license is subject to the following condition:
+## The above copyright notice and either this complete permission notice or at
+## a minimum a reference to the UPL must be included in all copies or
+## substantial portions of the Software.
+##
+## THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+## IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+## FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+## AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+## LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+## OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+## SOFTWARE.
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <style>
+    html {
+      height: 100%;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 10px;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .button {
+      margin: 5px 0;
+      width: 100%;
+      padding: 10px 0;
+      background-color: #2596be;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .button:hover {
+      background-color: #1f7c9c;
+    }
+
+    #loadbutton {
+      margin-bottom: 5px;
+      width: 100%;
+      padding: 10px 0;
+      background-color: #2596be;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    #loadbutton:hover {
+      background-color: #1f7c9c;
+    }
+
+    #loadbutton:disabled {
+      background-color: #ccc;  /* Light gray background */
+      color: #666;             /* Dark gray text */
+      cursor: not-allowed;     /* Change cursor */
+      opacity: 0.5;            /* Make it semi-transparent */
+    }
+    .checkbox-container {
+        margin: 5px 0;
+        cursor: pointer;
+        position: relative;
+    }
+
+    .checkbox-container:hover .tooltip {
+      visibility: visible;
+      opacity: 1;
+    }
+
+
+    footer {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      right: 10px;
+      text-align: center;
+    }
+
+    .tooltip {
+      visibility: hidden;
+      width: 200px;
+      background-color: white;
+      color: black;
+      text-align: center;
+      border-radius: 5px;
+      border: 1px solid black;
+      font-size: 14px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%; /* Position above the button */
+      left: 50%;
+      margin-left: -100px; /* Center the tooltip */
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    #reloadbutton {
+      width: 100%;
+      padding: 10px 0;
+      margin-right: 5px;
+      background-color: #2596be;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    #reloadbutton:disabled {
+      background-color: #ccc;  /* Light gray background */
+      color: #666;             /* Dark gray text */
+      cursor: not-allowed;     /* Change cursor */
+      opacity: 0.5;            /* Make it semi-transparent */
+    }
+
+    #reloadbutton:hover:not(:disabled) {
+      background-color: #1f7c9c;
+    }
+
+    #reloadbutton:hover:disabled {
+      background-color: #A6A8A8;
+    }
+
+    .closebutton {
+      width: 100%;
+      padding: 10px 0;
+      margin-left: 5px;
+      background-color: #DFE2E2;
+      color: black;
+      border: none;
+      cursor: pointer;
+    }
+
+    .closebutton:hover {
+      background-color: #A6A8A8;
+    }
+
+    #reloadbutton:hover + .tooltip {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .closebutton:hover + .tooltip {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .footer-container {
+        display: flex;
+        justify-content: space-between; /* Distributes buttons evenly */
+    }
+
+    .reloadicon {
+      font-family: Lucida Sans Unicode;
+      font-size: 20px;
+    }
+
+    #autoRefreshCheckbox {
+      margin: 5px 0;
+    }
+
+    label {
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <button id="loadbutton" onclick="fetchAndLoadData()">Load More Data</button>
+    <button class="button" onclick="openColorModal()">Color Settings</button>
+    <p id="status"></p>
+    <div class="checkbox-container">
+      <label>
+        <input type="checkbox" id="autoRefreshCheckbox" onclick="toggleAutoRefreshProperty()">
+        Auto Refresh Data
+      </label>
+      <div class="tooltip">Refresh your Data from the Autonomous Database</div>
+    </div>
+      <label for="timeSlider" id="timeLabelTitle" style="display: none">Auto Refresh Timer</label>
+      <input type="range" id="timeSlider" min="0" max="7" step="1" value="0" onchange="updateLabel(this.value)" style="display: none">
+      <label id="timeLabel" style="display: none"></label>
+     <p id="status"></p>
+  </div>
+  <footer>
+    <div class="footer-container">
+        <button id="reloadbutton" onclick="reloadData(this)"><span class="reloadicon">&#8634;</span> Reload</button>
+        <div class="tooltip">Reload Autonomous Database Data up to 10,000 records</div>
+        <button class="closebutton" onclick="closeButton()">X Close</button>
+        <div class="tooltip">Close the Autonomous Database sidebar</div>
+    </div>
+    <p id="status"></p>
+    <div class="logo" style="display: flex; align-items: center;">
+      <svg class="u30-oicn" xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 0 32 21" style="padding-right: 5px;">
+          <path fill="#C74634" d="M9.9,20.1c-5.5,0-9.9-4.4-9.9-9.9c0-5.5,4.4-9.9,9.9-9.9h11.6c5.5,0,9.9,4.4,9.9,9.9c0,5.5-4.4,9.9-9.9,9.9H9.9 M21.2,16.6c3.6,0,6.4-2.9,6.4-6.4c0-3.6-2.9-6.4-6.4-6.4h-11c-3.6,0-6.4,2.9-6.4,6.4s2.9,6.4,6.4,6.4H21.2"></path>
+      </svg>
+      <div style="padding-right: 4px; font-size: 11px; font-family: Helvetica Neue, Helvetica, Arial, sans-serif;">
+          Powered by
+      </div>
+      <div style="color: #C74634; font-weight: 450; font-family: Helvetica Neue, Helvetica, Arial, sans-serif;">
+          Autonomous Database
+      </div>
+    </div>
+  </footer>
+  <script>
+    window.onload =  function() {
+            checkAutoRefreshState();
+            checkAutoRefreshIntervalState();
+            checkLoadMoreState();
+            checkReloadEnabledState();
+    };
+
+    function fetchAndLoadData() {
+      google.script.run.fetchAndLoadData();  // Calls the server-side fetchAndLoadData function
+      checkLoadMoreState(); //Update LoadMore button after loading data
+    }
+
+    function openColorModal() {
+      google.script.run.openColorModal();
+    }
+
+    function reloadData(button) {
+      button.disabled = true;
+      button.innerHTML = '<span class="reloadicon"></span> Loading...';
+
+      google.script.run.reloadData();  // Calls the server-side reloadData function
+    }
+
+    function updateAutoRefreshCheckbox(toggleState) {
+      var checkbox = document.getElementById('autoRefreshCheckbox');
+      checkbox.checked = toggleState;
+      if(toggleState) {
+        document.getElementById('timeLabelTitle').style.display = 'block';
+        document.getElementById('timeSlider').style.display = 'block';
+        document.getElementById('timeLabel').style.display = 'block';
+      } else {
+        document.getElementById('timeLabelTitle').style.display = 'none';
+        document.getElementById('timeSlider').style.display = 'none';
+        document.getElementById('timeLabel').style.display = 'none';
+      }
+    }
+
+    function updateLoadMoreState(loadMore) {
+      const button = document.getElementById('loadbutton');
+      button.disabled = !loadMore;
+    }
+
+    function updateReloadEnabledState(reloadEnabled) {
+      const button = document.getElementById('reloadbutton');
+      button.disabled = !reloadEnabled;
+    }
+
+    function toggleAutoRefreshProperty() {
+      google.script.run.withSuccessHandler(updateAutoRefreshCheckbox).toggleAutoRefreshProperty();
+    }
+
+    function checkAutoRefreshState() {
+      google.script.run.withSuccessHandler(updateAutoRefreshCheckbox).getAutoRefreshProperty();
+    }
+
+    function checkLoadMoreState() {
+      google.script.run.withSuccessHandler(updateLoadMoreState).getLoadMoreProperty();
+    }
+
+    function checkReloadEnabledState() {
+      google.script.run.withSuccessHandler(updateReloadEnabledState).getReloadEnabledProperty();
+    }
+
+    function closeButton() {
+      google.script.host.close(); // Close the dialog after submission
+    }
+
+    function checkAutoRefreshIntervalState() {
+      google.script.run.withSuccessHandler(displayLabel).getAutoRefreshIntervalProperty();
+      google.script.run.withSuccessHandler(updateAutoRefreshIntervalSlider).getAutoRefreshIntervalProperty();
+    }
+
+    function updateAutoRefreshIntervalSlider(autoRefreshInterval) {
+      document.getElementById('timeSlider').value = autoRefreshInterval;
+    }
+
+    function displayLabel(value) {
+      var displayValues = ['5 minutes', '10 minutes', '15 minutes', '30 minutes', '1 hour', '6 hours', '12 hours', '1 day']
+      var displayValue = displayValues[parseInt(value)]
+
+      document.getElementById('timeLabel').innerText = displayValue;
+    }
+
+    function updateLabel(value) {
+      displayLabel(value)
+      google.script.run.createRefreshTrigger(value);
+    }
+
+  </script>
+</body>
+</html>

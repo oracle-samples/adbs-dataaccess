@@ -1,0 +1,178 @@
+<!--
+##  Copyright (c) 2024 Oracle and/or its affiliates.
+##
+## The Universal Permissive License (UPL), Version 1.0
+##
+## Subject to the condition set forth below, permission is hereby granted to any
+## person obtaining a copy of this software, associated documentation and/or data
+## (collectively the "Software"), free of charge and under any and all copyright
+## rights in the Software, and any and all patent rights owned or freely
+## licensable by each licensor hereunder covering either (i) the unmodified
+## Software as contributed to or provided by such licensor, or (ii) the Larger
+## Works (as defined below), to deal in both
+##
+## (a) the Software, and
+## (b) any piece of software and/or hardware listed in the lrgrwrks.txt file if
+## one is included with the Software (each a "Larger Work" to which the Software
+## is contributed by such licensors),
+##
+## without restriction, including without limitation the rights to copy, create
+## derivative works of, display, perform, and distribute the Software and make,
+## use, sell, offer for sale, import, export, have made, and have sold the
+## Software and the Larger Work(s), and to sublicense the foregoing rights on
+## either these or other terms.
+##
+## This license is subject to the following condition:
+## The above copyright notice and either this complete permission notice or at
+## a minimum a reference to the UPL must be included in all copies or
+## substantial portions of the Software.
+##
+## THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+## IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+## FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+## AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+## LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+## OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+## SOFTWARE.
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <style>
+    html {
+      height: 100%;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 10px;
+    }
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #2596be;
+    }
+    .help-icon {
+      display: flex;
+      width: 100px;
+      height: 30px;
+      border-radius: 50%;
+      transform: translateX(30%);
+      color: white;
+      text-align: center;
+      line-height: 30px; /* Center the text vertically */
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 5px;
+      padding-top: 10px;
+    }
+    button {
+      width: 25%;
+      padding: 10px 0px;
+      margin: 5px 0;
+      transform: translateX(50%);
+      background-color: #2596be;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #1f7c9c;
+    }
+    footer {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      right: 10px;
+      text-align: center;
+    }
+
+    a {
+      color: #0000FF;
+    }
+
+    .tooltip {
+      width: 160px;
+      height: 80px;
+      white-space: nowrap;
+      font-size: 14px;
+      visibility: hidden; /* Hidden by default */
+      background-color: white; /* Tooltip background */
+      color: black; /* Tooltip text color */
+      text-align: center; /* Centered text */
+      border-radius: 5px;
+      border: 1px solid black;
+      padding: 5px; /* Padding */
+      position: absolute; /* Position relative to the span */
+      z-index: 1; /* Ensure it's above other elements */
+      top: 8%; /* Position below the span */
+      left: 75%; /* Center it */
+      transform: translateX(-80%); /* Adjust for centering */
+      opacity: 0; /* Make it transparent */
+      transition: opacity 0.3s; /* Smooth transition for visibility */
+    }
+
+    .tooltip.visible {
+        visibility: visible; /* Show tooltip */
+        opacity: 1; /* Fade in */
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <button onclick="openURLModal()">Load Data</button>
+    <span class="help-icon">
+      <svg width="20" height="20" viewBox="0 0 20 20" focusable="false" xmlns="http://www.w3.org/2000/svg" ratio="1">
+        <path fill="white" d="M12.13,11.59 C11.97,12.84 10.35,14.12 9.1,14.16 C6.17,14.2 9.89,9.46 8.74,8.37 C9.3,8.16 10.62,7.83 10.62,8.81 C10.62,9.63 10.12,10.55 9.88,11.32 C8.66,15.16 12.13,11.15 12.14,11.18 C12.16,11.21 12.16,11.35 12.13,11.59 C12.08,11.95 12.16,11.35 12.13,11.59 L12.13,11.59 Z M11.56,5.67 C11.56,6.67 9.36,7.15 9.36,6.03 C9.36,5 11.56,4.54 11.56,5.67 L11.56,5.67 Z">
+        </path>
+        <circle fill="none" stroke="var(--oc-colors-main-fgBase, #fff)" stroke-width="1.1" cx="10" cy="10" r="9">
+        </circle>
+      </svg>
+    </span>
+    <span class="tooltip">
+      <p>Load data using <br> Pre-authenticated URL</p>
+      <a href="https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/autonomous-preauthenticated-request-url.html" target="_blank">Learn More</a>
+    </span>
+  </div>
+
+  <footer>
+    <div class="logo" style="display: flex; align-items: center;">
+      <svg class="u30-oicn" xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 0 32 21" style="padding-right: 5px;">
+          <path fill="#C74634" d="M9.9,20.1c-5.5,0-9.9-4.4-9.9-9.9c0-5.5,4.4-9.9,9.9-9.9h11.6c5.5,0,9.9,4.4,9.9,9.9c0,5.5-4.4,9.9-9.9,9.9H9.9 M21.2,16.6c3.6,0,6.4-2.9,6.4-6.4c0-3.6-2.9-6.4-6.4-6.4h-11c-3.6,0-6.4,2.9-6.4,6.4s2.9,6.4,6.4,6.4H21.2"></path>
+      </svg>
+      <div style="padding-right: 4px; font-size: 11px; font-family: Helvetica Neue, Helvetica, Arial, sans-serif;">
+          Powered by
+      </div>
+      <div style="color: #C74634; font-weight: 450; font-family: Helvetica Neue, Helvetica, Arial, sans-serif;">
+          Autonomous Database
+      </div>
+    </div>
+  </footer>
+  <script>
+      function openURLModal() {
+         google.script.run.openURLModal();
+      }
+
+      const hoverElement = document.querySelector('.help-icon');
+      const tooltip = document.querySelector('.tooltip');
+
+      let tooltipTimeout;
+
+      // Show tooltip on mouse enter
+      hoverElement.addEventListener('mouseenter', () => {
+          tooltip.classList.add('visible');
+          clearTimeout(tooltipTimeout); // Clear any existing timeout
+      });
+
+      // Hide tooltip after mouse leave
+      hoverElement.addEventListener('mouseleave', () => {
+          tooltipTimeout = setTimeout(() => {
+              tooltip.classList.remove('visible');
+          }, 2000); // Tooltip stays visible for 2 seconds
+      });
+  </script>
+</body>
+</html>

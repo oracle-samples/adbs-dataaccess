@@ -1,0 +1,203 @@
+<!--
+##  Copyright (c) 2024 Oracle and/or its affiliates.
+##
+## The Universal Permissive License (UPL), Version 1.0
+##
+## Subject to the condition set forth below, permission is hereby granted to any
+## person obtaining a copy of this software, associated documentation and/or data
+## (collectively the "Software"), free of charge and under any and all copyright
+## rights in the Software, and any and all patent rights owned or freely
+## licensable by each licensor hereunder covering either (i) the unmodified
+## Software as contributed to or provided by such licensor, or (ii) the Larger
+## Works (as defined below), to deal in both
+##
+## (a) the Software, and
+## (b) any piece of software and/or hardware listed in the lrgrwrks.txt file if
+## one is included with the Software (each a "Larger Work" to which the Software
+## is contributed by such licensors),
+##
+## without restriction, including without limitation the rights to copy, create
+## derivative works of, display, perform, and distribute the Software and make,
+## use, sell, offer for sale, import, export, have made, and have sold the
+## Software and the Larger Work(s), and to sublicense the foregoing rights on
+## either these or other terms.
+##
+## This license is subject to the following condition:
+## The above copyright notice and either this complete permission notice or at
+## a minimum a reference to the UPL must be included in all copies or
+## substantial portions of the Software.
+##
+## THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+## IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+## FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+## AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+## LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+## OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+## SOFTWARE.
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <style>
+    html {
+      height: 100%;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0 10px;
+    }
+    .container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      height: 150px;
+      margin-bottom: 5px;
+    }
+    button {
+      margin: 5px 0;
+      width: 100%;
+      padding: 10px;
+      background-color: #2596be;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #1f7c9c;
+    }
+
+    .spinner {
+      margin: 5px 0;
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-top: 4px solid #3498db;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+      margin-right: 10px;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .loading-container {
+        display: flex;
+        align-items: center; /* Center vertically */
+    }
+
+    footer {
+      position: absolute;
+      left: 5px;
+      right: 5px;
+      bottom: 5px;
+      text-align: center;
+    }
+
+    .footer-container {
+      display: flex;
+      justify-content: space-between; /* Distributes buttons evenly */
+    }
+
+    #enable {
+      width: 100%;
+      padding: 10px 0;
+      margin-right: 5px;
+      background-color: #2596be;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    #enable:hover {
+      background-color: #1f7c9c;
+    }
+
+    #reset {
+      width: 100%;
+      padding: 10px 0;
+      margin-left: 5px;
+      background-color: #DFE2E2;
+      color: black;
+      border: none;
+      cursor: pointer;
+    }
+
+    #reset:hover {
+      background-color: #A6A8A8;
+    }
+  </style>
+</head>
+<body>
+  <h3>Select Columns for Coloring</h3>
+  <div class="container">
+      <div id="headerContainer"></div>
+      <p id="status"></p>
+  </div>
+  <div class="loading-container" id="loadingContainer" style="display: none;">
+      <div class="spinner" id="spinner"></div>
+      <span> Processing, please wait...</span>
+  </div>
+  <footer>
+      <div class="footer-container">
+      <button id='enable' onclick="submitSelection()">Enable Color</button>
+      <button id='reset' class="button" onclick="resetColor()">Reset Color</button>
+    </div>
+  </footer>
+  <script>
+    function onOpen() {
+      google.script.run.withSuccessHandler(populateHeaders).getHeaders();
+    }
+
+    function populateHeaders(headers) {
+      var container = document.getElementById('headerContainer');
+      headers.forEach(function(header) {
+        var checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = header;
+        checkbox.id = header;
+
+        var label = document.createElement('label');
+        label.htmlFor = header;
+        label.appendChild(document.createTextNode(header));
+
+        var div = document.createElement('div');
+        div.appendChild(checkbox);
+        div.appendChild(label);
+        container.appendChild(div);
+      });
+    }
+
+    function submitSelection() {
+      const loadingContainer = document.getElementById('loadingContainer');
+      loadingContainer.style.display = 'flex';
+
+      var selectedHeaders = [];
+      var checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+      checkboxes.forEach(function(checkbox) {
+        selectedHeaders.push(checkbox.value);
+      });
+      google.script.run.withSuccessHandler(closeModal).handleHeaderSelection(selectedHeaders);
+    }
+
+    function resetColor() {
+      const loadingContainer = document.getElementById('loadingContainer');
+      loadingContainer.style.display = 'flex';
+
+      google.script.run.withSuccessHandler(closeModal).resetColor();
+    }
+
+    function closeModal() {
+      const loadingContainer = document.getElementById('loadingContainer');
+      loadingContainer.style.display = 'none';
+      google.script.host.close(); // Close the dialog after submission
+    }
+
+    window.onload = onOpen; // Load headers when the modal opens
+  </script>
+</body>
+</html>
