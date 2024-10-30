@@ -3,7 +3,7 @@
 The following sample code is for enabling Google Sheets Pre-Authenticated URL Add-on. 
 This folder maintains the sample source code for the add-on, with instructions on how to do a deployment and installation as well.
 
-The sample add-on provides functionality for integration of Pre-Authenticated URL with Google Sheets, 
+The add-on provides functionality for integration of Pre-Authenticated URL with Google Sheets, 
 enabling auto refresh and loading/reloading of data as well as coloring of columns.
 
 # Prerequisite
@@ -28,15 +28,15 @@ Customer should have a Google account.
 `Google Apps Script API on` in your Google account.
 ##  
 
-4. Login to Google account using Google Apps Script CLI tool and select the permission `Create and update Google Apps Script projects`
+1. Login to Google account using Google Apps Script CLI tool and select the permission `Create and update Google Apps Script projects`
 
     ```clasp login```
 ##  
 
-5. Open a Google Sheet and navigate to `Extensions -> Apps Script`. Go to `Project Settings` and under `IDs` section, copy the `Script ID`
+1. Open a Google Sheet and navigate to `Extensions -> Apps Script`. Go to `Project Settings` and under `IDs` section, copy the `Script ID`
 ##  
 
-6. Clone the Google Apps Script project locally and replace the remote code.
+1. Clone the Google Apps Script project locally and replace the remote code.
 
     ```clasp clone <Script ID copied in previous step>``` 
 
@@ -45,10 +45,10 @@ Customer should have a Google account.
     ```clasp push -f```
 ##  
 
-7. Install the Apps Script Project by going to `Editor` in your Apps Script Project, selecting `Code.gs` and click `Run` function for `onInstall`. Note that you may need to review and accept permissions required for the sample Add-on.
+1. Install the Apps Script Project by going to `Editor` in your Apps Script Project, selecting `Code.gs` and click `Run` function for `onInstall`. Note that you may need to review and accept permissions required for the sample Add-on.
 ##  
 
-8. Wait for install to finish. Refresh the Google Sheet & custom menu item `Autonomous Database` for the new Add-on should be visible.    
+1. Wait for install to finish. Refresh the Google Sheet & custom menu item `Autonomous Database` for the new Add-on should be visible.    
 ##  
 
 # Usage

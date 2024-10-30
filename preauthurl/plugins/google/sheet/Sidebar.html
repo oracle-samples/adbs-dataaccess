@@ -149,7 +149,7 @@
       background-color: #A6A8A8;
     }
 
-    .closebutton {
+    .resetbutton {
       width: 100%;
       padding: 10px 0;
       margin-left: 5px;
@@ -159,7 +159,7 @@
       cursor: pointer;
     }
 
-    .closebutton:hover {
+    .resetbutton:hover {
       background-color: #A6A8A8;
     }
 
@@ -168,7 +168,7 @@
       opacity: 1;
     }
 
-    .closebutton:hover + .tooltip {
+    .resetbutton:hover + .tooltip {
       visibility: visible;
       opacity: 1;
     }
@@ -213,8 +213,8 @@
     <div class="footer-container">
         <button id="reloadbutton" onclick="reloadData(this)"><span class="reloadicon">&#8634;</span> Reload</button>
         <div class="tooltip">Reload Autonomous Database Data up to 10,000 records</div>
-        <button class="closebutton" onclick="closeButton()">X Close</button>
-        <div class="tooltip">Close the Autonomous Database sidebar</div>
+        <button class="resetbutton" onclick="resetButton(this)">Reset</button>
+        <div class="tooltip">Reset the Autonomous Database Data</div>
     </div>
     <p id="status"></p>
     <div class="logo" style="display: flex; align-items: center;">
@@ -251,6 +251,13 @@
       button.innerHTML = '<span class="reloadicon"></span> Loading...';
 
       google.script.run.reloadData();  // Calls the server-side reloadData function
+    }
+
+    function resetButton(button) {
+      button.disabled = true;
+      button.innerHTML = 'Resetting...';
+
+      google.script.run.reset();  // Calls the server-side reset function
     }
 
     function updateAutoRefreshCheckbox(toggleState) {
@@ -291,10 +298,6 @@
 
     function checkReloadEnabledState() {
       google.script.run.withSuccessHandler(updateReloadEnabledState).getReloadEnabledProperty();
-    }
-
-    function closeButton() {
-      google.script.host.close(); // Close the dialog after submission
     }
 
     function checkAutoRefreshIntervalState() {
