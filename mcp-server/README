@@ -1,106 +1,66 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Database MCP Tools README</title>
-    <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; }
-        h1 { border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        h2 { margin-top: 30px; color: #2c3e50; }
-        code { background-color: #f4f4f4; padding: 2px 4px; border-radius: 4px; font-family: "Courier New", Courier, monospace; }
-        pre { background-color: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto; }
-        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
-        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #ddd; }
-        th { background-color: #f8f8f8; }
-        .pagination-note { background-color: #e7f3fe; border-left: 5px solid #2196F3; padding: 10px; margin: 20px 0; }
-    </style>
-</head>
-<body>
+# Database MCP Server Tools
 
-    <h1>Database MCP Server Tools</h1>
-    <p>This repository provides SQL scripts to create user-defined tools for a Model Context Protocol (MCP) server. These tools facilitate common database introspection and interaction tasks.</p>
+This repository provides a set of SQL scripts to create user-defined database functions and corresponding MCP (Model Context Protocol) tools. These tools are designed to streamline common database introspection and interaction tasks, featuring built-in pagination for handling large results.
 
-    <h2>Implementation Approach</h2>
-    <p>For each tool, the implementation follows a two-step process:</p>
-    <ol>
-        <li><strong>Create Database Function:</strong> Defines the backend logic in the database.</li>
-        <li><strong>Define MCP Tool:</strong> Wraps the function for use by the MCP server.</li>
-    </ol>
+## Prerequisites
 
-    <h2>Pagination Parameters</h2>
-    <div class="pagination-note">
-        <strong>Note:</strong> Tools that return large datasets support pagination to optimize performance:
-        <ul>
-            <li><code>limit</code>: Sets the page size (max records to return).</li>
-            <li><code>offset</code>: Indicates the number of records to skip before applying the limit.</li>
-        </ul>
-    </div>
+*   A database that supports SQL functions/stored procedures (e.g., PostgreSQL).
+*   MCP server configuration capable of executing SQL tools.
 
-    <h2>Available Tools</h2>
+## SQL Setup Script
 
-    <h3>1. <code>LIST_SCHEMA</code></h3>
-    <p>Returns the list of schemas available to the user in the database.</p>
+Run the following SQL script in your database to create the necessary functions.
 
-    <h3>2. <code>LIST_OBJECTS</code></h3>
-    <p>Returns the list of database objects (tables, views, etc.) for a specified schema.</p>
-    <p><strong>Parameters:</strong> <code>schema_name</code>, <code>limit</code>, <code>offset</code></p>
-
-    <h3>3. <code>GET_OBJECT_DETAILS</code></h3>
-    <p>Returns detailed information about a specific database object (e.g., column names, types) within the given schema.</p>
-    <p><strong>Parameters:</strong> <code>schema_name</code>, <code>object_name</code></p>
-
-    <h3>4. <code>EXECUTE_SQL</code></h3>
-    <p>Runs the provided SQL query statement directly.</p>
-    <p><strong>Usage:</strong> Provide the SQL query string <strong>without</strong> a trailing semicolon.</p>
-
-    <h2>SQL Setup Script</h2>
-    <pre><code>
--- 1. LIST_SCHEMA
+```sql
+-- 1. LIST_SCHEMA: Returns the list of schemas available to the user
 CREATE OR REPLACE FUNCTION list_schemas()
-RETURNS TABLE(schema_name TEXT) AS $$
+RETURNS TABLE(schema_name TEXT) 
+LANGUAGE plpgsql
+AS $$
 BEGIN
     RETURN QUERY 
     SELECT nspname::TEXT 
     FROM pg_namespace 
     WHERE nspname NOT LIKE 'pg_%' AND nspname != 'information_schema';
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
--- 2. LIST_OBJECTS (with pagination)
-CREATE OR REPLACE FUNCTION list_objects(p_schema TEXT, p_limit INT, p_offset INT)
-RETURNS TABLE(object_name TEXT, object_type TEXT) AS $$
+-- 2. LIST_OBJECTS: Returns database objects for a specified schema
+-- Parameters: p_schema (TEXT), p_limit (INT), p_offset (INT)
+CREATE OR REPLACE FUNCTION list_objects(p_schema TEXT, p_limit INT DEFAULT 100, p_offset INT DEFAULT 0)
+RETURNS TABLE(object_name TEXT, object_type TEXT) 
+LANGUAGE plpgsql
+AS $$
 BEGIN
     RETURN QUERY 
-    SELECT tablename::TEXT, 'table'::TEXT 
-    FROM pg_tables WHERE schemaname = p_schema
-    UNION ALL
-    SELECT viewname::TEXT, 'view'::TEXT 
-    FROM pg_views WHERE schemaname = p_schema
+    SELECT table_name::TEXT, table_type::TEXT
+    FROM information_schema.tables
+    WHERE table_schema = p_schema
     LIMIT p_limit OFFSET p_offset;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
--- 3. GET_OBJECT_DETAILS
+-- 3. GET_OBJECT_DETAILS: Returns detailed info about a specific object
+-- Parameters: p_schema (TEXT), p_object (TEXT)
 CREATE OR REPLACE FUNCTION get_object_details(p_schema TEXT, p_object TEXT)
-RETURNS TABLE(column_name TEXT, data_type TEXT, is_nullable TEXT) AS $$
+RETURNS TABLE(column_name TEXT, data_type TEXT, is_nullable TEXT) 
+LANGUAGE plpgsql
+AS $$
 BEGIN
     RETURN QUERY 
     SELECT column_name::TEXT, data_type::TEXT, is_nullable::TEXT
     FROM information_schema.columns
     WHERE table_schema = p_schema AND table_name = p_object;
 END;
-$$ LANGUAGE plpgsql;
+$$;
 
--- 4. EXECUTE_SQL
--- Note: Security considerations should be applied to dynamic SQL in production
+-- 4. EXECUTE_SQL: Runs a provided SQL query
+-- Note: Do not include a trailing semicolon in the input query string
 CREATE OR REPLACE FUNCTION execute_sql(p_query TEXT)
-RETURNS SETOF RECORD AS $$
+RETURNS TABLE(result JSONB) 
+LANGUAGE plpgsql
+AS $$
 BEGIN
-    RETURN QUERY EXECUTE p_query;
+    RETURN QUERY EXECUTE 'SELECT to_jsonb(t) FROM (' || p_query || ') t';
 END;
-$$ LANGUAGE plpgsql;
-    </code></pre>
-
-</body>
-</html>
+$$;
