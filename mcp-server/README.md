@@ -1,4 +1,4 @@
-# Database MCP Server Tools
+# Autonomous AI Database MCP Server Tools
 
 A collection of user-defined tools designed to streamline common database management and exploration tasks via a Model Context Protocol (MCP) server.
 
