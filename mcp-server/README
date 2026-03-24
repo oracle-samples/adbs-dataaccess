@@ -1,0 +1,6 @@
+Use the SQL script below to create user-defined tools to accomplish common database MCP server tasks. In each case, we first create the database function before defining the tool that uses it. For tools that can provide larger results, there are two pagination parameters: offset, which sets the page size when performing paginated data retrieval, and limit, which indicates the page to fetch by skipping records before applying the limit.
+
+LIST_SCHEMA - returns the list of schemas available to the user in the database.
+LIST_OBJECTS  - returns the list of database objects for the specified schema.
+GET_OBJECT_DETAILS - returns detailed information about a specific database object within the given schema.
+EXECUTE_SQL - runs the provided SQL query statement without trailing semicolon. 
