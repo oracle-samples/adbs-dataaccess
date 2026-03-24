@@ -37,3 +37,7 @@ Executes a raw SQL statement against the database.
 ## Setup
 1. Run the accompanying SQL script in your database environment to register the necessary backend functions.
 2. Configure your MCP server to point to these functions using the tool definitions provided in your server config.
+
+## Reference
+For detailed instructions on implementation and further configuration, please refer to the official documentation:
+[Use MCP Server with Oracle Autonomous Database](https://oracle.com)
